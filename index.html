@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowTodo - 심플하고 모던한 할 일 관리</title>
+  <meta name="description" content="매일의 작업을 직관적이고 아름답게 관리하세요. 다크 모드와 로컬 스토리지 보존 기능을 갖춘 프리미엄 To-Do List 웹앱입니다.">
+  <meta name="keywords" content="Todo, To-do list, 할일 관리, 다크모드 투두, 모던 투두, FlowTodo">
+  
+  <!-- Google Fonts - Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Link -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- JS Link (defer) -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- 배경 장식 요소를 위한 그래디언트 오버레이 블러 볼 (유리모핑 효과 배가) -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="app-container">
+    <!-- Header 영역 -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <h1>FlowTodo</h1>
+      </div>
+      
+      <!-- 테마 토글 버튼 -->
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="테마 전환">
+        <!-- Sun Icon (라이트모드 시 활성화될 아이콘) -->
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        <!-- Moon Icon (다크모드 시 활성화될 아이콘) -->
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+    </header>
+
+    <!-- Main Content 영역 (Glassmorphism Card) -->
+    <main class="app-card">
+      
+      <!-- 1. 프로그레스 세션 -->
+      <section class="progress-section" aria-label="할 일 진행률">
+        <div class="progress-info">
+          <span class="progress-title">오늘의 달성도</span>
+          <span id="progress-text" class="progress-percentage">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div id="progress-bar" class="progress-bar-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-count-text" id="progress-count">완료된 할 일이 없습니다.</div>
+      </section>
+
+      <!-- 2. 입력 폼 세션 -->
+      <section class="input-section" aria-label="할 일 입력">
+        <form id="todo-form" class="todo-form">
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="todo-input" 
+              placeholder="새로운 할 일을 입력하세요..." 
+              maxlength="60"
+              autocomplete="off"
+              required
+            >
+            <span class="input-focus-line"></span>
+          </div>
+          <button type="submit" id="add-btn" class="add-button" aria-label="할 일 추가">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </form>
+      </section>
+
+      <!-- 3. 필터 탭 영역 -->
+      <nav class="filter-nav" aria-label="할 일 필터">
+        <div class="filter-slider-bg"></div>
+        <button id="filter-all" class="filter-tab active" data-filter="all">전체</button>
+        <button id="filter-active" class="filter-tab" data-filter="active">진행 중</button>
+        <button id="filter-completed" class="filter-tab" data-filter="completed">완료됨</button>
+      </nav>
+
+      <!-- 4. 할 일 리스트 영역 -->
+      <section class="list-section" aria-label="할 일 목록">
+        <ul id="todo-list" class="todo-list">
+          <!-- 스크립트를 통해 동적으로 렌더링될 영역 -->
+        </ul>
+        
+        <!-- 할 일이 없을 때 노출할 엠프티 뷰 -->
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          </div>
+          <p class="empty-message">할 일 목록이 비어 있습니다.<br>새로운 목표를 추가해 보세요!</p>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer 영역 -->
+    <footer class="app-footer">
+      <p>&copy; 2026 FlowTodo. Designed for elegant productivity.</p>
+    </footer>
+  </div>
+</body>
+</html>

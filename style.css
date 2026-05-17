@@ -1,0 +1,750 @@
+/* ==========================================================================
+   1. DESIGN SYSTEM & THEME VARIABLES
+   ========================================================================== */
+:root {
+  /* 라이트 테마 변수 */
+  --font-primary: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  --primary: #6366f1; /* Indigo */
+  --primary-hover: #4f46e5;
+  --primary-glow: rgba(99, 102, 241, 0.3);
+  --accent: #a855f7; /* Purple */
+  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+  
+  --bg-primary: #f8fafc;
+  --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+  
+  --card-bg: rgba(255, 255, 255, 0.45);
+  --card-border: rgba(255, 255, 255, 0.6);
+  --card-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+  
+  --text-primary: #0f172a; /* Slate 900 */
+  --text-secondary: #475569; /* Slate 600 */
+  --text-muted: #94a3b8; /* Slate 400 */
+  
+  --input-bg: rgba(255, 255, 255, 0.5);
+  --input-border: rgba(226, 232, 240, 0.8);
+  --input-focus: #6366f1;
+  
+  --item-bg: rgba(255, 255, 255, 0.5);
+  --item-border: rgba(255, 255, 255, 0.5);
+  --item-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  --item-hover-bg: rgba(255, 255, 255, 0.8);
+  
+  --danger: #ef4444; /* Red */
+  --danger-hover: #dc2626;
+  --danger-glow: rgba(239, 68, 68, 0.2);
+  
+  --success: #10b981; /* Emerald */
+  --success-glow: rgba(16, 185, 129, 0.2);
+  
+  --glow-1: rgba(99, 102, 241, 0.2);
+  --glow-2: rgba(168, 85, 247, 0.2);
+  
+  --border-radius-lg: 24px;
+  --border-radius-md: 16px;
+  --border-radius-sm: 12px;
+  
+  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 다크 테마 변수 */
+[data-theme="dark"] {
+  --bg-primary: #090d16;
+  --bg-gradient: linear-gradient(135deg, #070a13 0%, #110e20 100%);
+  
+  --card-bg: rgba(15, 22, 38, 0.5);
+  --card-border: rgba(255, 255, 255, 0.05);
+  --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  
+  --text-primary: #f8fafc; /* Slate 50 */
+  --text-secondary: #94a3b8; /* Slate 400 */
+  --text-muted: #475569; /* Slate 600 */
+  
+  --input-bg: rgba(15, 22, 38, 0.3);
+  --input-border: rgba(255, 255, 255, 0.05);
+  --input-focus: #a855f7;
+  
+  --item-bg: rgba(20, 29, 48, 0.45);
+  --item-border: rgba(255, 255, 255, 0.03);
+  --item-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --item-hover-bg: rgba(24, 35, 58, 0.6);
+  
+  --glow-1: rgba(99, 102, 241, 0.25);
+  --glow-2: rgba(168, 85, 247, 0.25);
+}
+
+/* ==========================================================================
+   2. GLOBAL STYLES & RESET
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-primary);
+  background: var(--bg-primary);
+  background-image: var(--bg-gradient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+  transition: background var(--transition-smooth);
+  padding: 24px 16px;
+}
+
+/* 배경 오버레이 및 블러 장식 */
+.bg-glow {
+  position: absolute;
+  width: 45vw;
+  height: 45vw;
+  max-width: 500px;
+  max-height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  pointer-events: none;
+  animation: pulse-slow 8s infinite alternate ease-in-out;
+  transition: background var(--transition-smooth);
+}
+
+.bg-glow-1 {
+  background: var(--glow-1);
+  top: -10%;
+  left: -5%;
+}
+
+.bg-glow-2 {
+  background: var(--glow-2);
+  bottom: -10%;
+  right: -5%;
+  animation-delay: 2s;
+}
+
+@keyframes pulse-slow {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(8%, 5%) scale(1.15);
+  }
+}
+
+/* ==========================================================================
+   3. APP LAYOUT CONTAINER
+   ========================================================================== */
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  z-index: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==========================================================================
+   4. APP HEADER
+   ========================================================================== */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px -4px var(--primary-glow);
+}
+
+.logo-icon svg {
+  animation: logo-spin 6s infinite linear;
+}
+
+@keyframes logo-spin {
+  0%, 80%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(360deg); }
+}
+
+.brand h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 다크 모드 토글 버튼 */
+.theme-toggle-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 10px 20px -8px var(--primary-glow);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-btn svg {
+  position: absolute;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+}
+
+/* 라이트 테마: 달(Moon)만 보이고 해(Sun)는 회전하여 숨김 */
+[data-theme="light"] .sun-icon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0);
+}
+
+[data-theme="light"] .moon-icon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+/* 다크 테마: 해(Sun)가 나타나고 달(Moon)은 회전하여 숨김 */
+[data-theme="dark"] .sun-icon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+[data-theme="dark"] .moon-icon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0);
+}
+
+/* ==========================================================================
+   5. MAIN APP CARD (GLASSMORPHISM)
+   ========================================================================== */
+.app-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid var(--card-border);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  transition: border var(--transition-smooth), background var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+/* ==========================================================================
+   6. PROGRESS SECTION
+   ========================================================================== */
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.progress-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.progress-percentage {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+  font-family: 'Outfit', sans-serif;
+}
+
+.progress-bar-container {
+  height: 8px;
+  background: var(--input-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 999px;
+  width: 0%;
+  transition: width 0.6s cubic-bezier(0.1, 0.8, 0.3, 1);
+  box-shadow: 0 2px 10px var(--primary-glow);
+}
+
+.progress-count-text {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   7. INPUT FORM SECTION
+   ========================================================================== */
+.todo-form {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.input-wrapper {
+  position: relative;
+  flex-grow: 1;
+}
+
+.todo-form input {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+  padding: 15px 20px;
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.todo-form input::placeholder {
+  color: var(--text-muted);
+}
+
+/* 포커스 시 커스텀 링 가이드 애니메이션 */
+.input-focus-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: var(--transition-smooth);
+  transform: translateX(-50%);
+  border-radius: 99px;
+  pointer-events: none;
+}
+
+.todo-form input:focus {
+  border-color: transparent;
+  box-shadow: 0 5px 15px -5px rgba(0,0,0,0.05);
+}
+
+.todo-form input:focus + .input-focus-line {
+  width: calc(100% - 10px);
+}
+
+.add-button {
+  background: var(--gradient-primary);
+  color: #ffffff;
+  border: none;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px -6px var(--primary-glow);
+  transition: var(--transition-smooth);
+  flex-shrink: 0;
+}
+
+.add-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -4px var(--primary-glow);
+}
+
+.add-button:active {
+  transform: scale(0.95);
+}
+
+/* ==========================================================================
+   8. FILTER NAVIGATION (SLIDING CAPSULE)
+   ========================================================================== */
+.filter-nav {
+  display: flex;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  padding: 5px;
+  border-radius: var(--border-radius-md);
+  position: relative;
+  justify-content: space-between;
+}
+
+.filter-tab {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 0;
+  cursor: pointer;
+  text-align: center;
+  border-radius: var(--border-radius-sm);
+  z-index: 1;
+  transition: var(--transition-fast);
+}
+
+.filter-tab:hover {
+  color: var(--text-primary);
+}
+
+.filter-tab.active {
+  color: #ffffff;
+}
+
+/* 슬라이딩 백그라운드 캡슐 효과 */
+.filter-slider-bg {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: calc(33.333% - 6.666px);
+  height: calc(100% - 10px);
+  background: var(--gradient-primary);
+  border-radius: var(--border-radius-sm);
+  z-index: 0;
+  box-shadow: 0 4px 12px -2px var(--primary-glow);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 필터 위치에 따른 슬라이더 전환 */
+[data-active-filter="active"] .filter-slider-bg {
+  transform: translateX(100%);
+}
+
+[data-active-filter="completed"] .filter-slider-bg {
+  transform: translateX(200%);
+}
+
+/* ==========================================================================
+   9. TODO LIST & ITEMS
+   ========================================================================== */
+.list-section {
+  position: relative;
+  min-height: 200px;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 할 일 단일 아이템 */
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--item-bg);
+  border: 1px solid var(--item-border);
+  border-radius: var(--border-radius-md);
+  padding: 16px 20px;
+  box-shadow: var(--item-shadow);
+  transition: var(--transition-smooth);
+  animation: slide-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.todo-item:hover {
+  background: var(--item-hover-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.04);
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 삭제 애니메이션 클래스 */
+.todo-item.removing {
+  animation: slide-out 0.35s cubic-bezier(0.32, 0, 0.67, 0) forwards;
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.95);
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: -12px;
+    border-color: transparent;
+  }
+}
+
+/* 아이템 구조 콘텐츠 */
+.todo-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-grow: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 커스텀 체크박스 */
+.custom-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  background: transparent;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-checkbox svg {
+  width: 12px;
+  height: 12px;
+  color: #ffffff;
+  transform: scale(0);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.todo-item:hover .custom-checkbox {
+  border-color: var(--primary);
+}
+
+/* 할 일 텍스트 */
+.todo-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: var(--transition-smooth);
+  word-break: break-all;
+  position: relative;
+}
+
+/* 완료 상태인 경우 스타일 */
+.todo-item.completed .custom-checkbox {
+  background: var(--gradient-primary);
+  border-color: transparent;
+  box-shadow: 0 3px 8px var(--primary-glow);
+}
+
+.todo-item.completed .custom-checkbox svg {
+  transform: scale(1);
+}
+
+.todo-item.completed .todo-text {
+  color: var(--text-muted);
+  opacity: 0.65;
+}
+
+/* 완료 텍스트 취소선 페이드 드로잉 애니메이션 */
+.todo-item.completed .todo-text::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1.5px;
+  background: var(--text-muted);
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.todo-text::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1.5px;
+  background: var(--text-muted);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+/* 휴지통 삭제 버튼 */
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-fast);
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* 호버 시 혹은 모바일 대응을 위해 언제나 보이거나 호버 시 선명화 */
+.todo-item:hover .delete-btn {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 모바일 터치 기기에서는 항상 보이도록 */
+@media (hover: none) {
+  .delete-btn {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.delete-btn:active {
+  transform: scale(0.9);
+}
+
+/* ==========================================================================
+   10. EMPTY STATE (엠프티 뷰)
+   ========================================================================== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 10px;
+  text-align: center;
+  color: var(--text-muted);
+  animation: fade-in 0.5s ease forwards;
+}
+
+.empty-state.hidden {
+  display: none;
+}
+
+.empty-icon {
+  color: var(--text-muted);
+  opacity: 0.4;
+  margin-bottom: 16px;
+  animation: float 4s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.empty-message {
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
+   11. APP FOOTER
+   ========================================================================== */
+.app-footer {
+  text-align: center;
+  padding: 8px;
+}
+
+.app-footer p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* ==========================================================================
+   12. RESPONSIVE DESIGN (반응형 최적화)
+   ========================================================================== */
+@media (max-width: 480px) {
+  body {
+    padding: 16px 8px;
+  }
+  
+  .app-card {
+    padding: 24px 20px;
+    gap: 24px;
+  }
+  
+  .brand h1 {
+    font-size: 1.35rem;
+  }
+  
+  .todo-form input {
+    padding: 13px 16px;
+  }
+  
+  .add-button {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .todo-item {
+    padding: 14px 16px;
+  }
+}
